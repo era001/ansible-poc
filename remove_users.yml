@@ -1,0 +1,24 @@
+---
+- name: Remove users and groups
+  hosts: cloud_servers  # "server1" or "cloud_servers" if you want all
+  become: yes
+  tasks:
+
+    - name: Remove users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes   # also remove home directory
+      loop:
+        - alice
+        - bob
+        - carol
+
+    - name: Remove groups
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - admin
+        - dev
+        - analyst

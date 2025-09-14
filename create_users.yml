@@ -1,0 +1,18 @@
+- hosts: cloud_servers # "server1" or "cloud_servers" if you want all
+  become: yes
+  vars_files:
+    - users.json
+  tasks:
+    - name: Ensure groups exist
+      group:
+        name: "{{ item.role }}"
+        state: present
+      loop: "{{ lookup('file', 'users.json') | from_json }}"
+
+    - name: Create users
+      user:
+        name: "{{ item.username }}"
+        groups: "{{ item.role }}"
+        state: present
+        shell: /bin/bash
+      loop: "{{ lookup('file', 'users.json') | from_json }}"

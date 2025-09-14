@@ -1,0 +1,35 @@
+---
+- name: Verify users and groups exist
+  hosts: cloud_servers
+  gather_facts: no
+
+  vars:
+    users:
+      - alice
+      - bob
+      - carol
+    demo_groups:
+      - admin
+      - dev
+      - analyst
+
+  tasks:
+    - name: Check groups exist
+      command: getent group {{ item }}
+      register: group_check
+      ignore_errors: yes
+      loop: "{{ demo_groups }}"
+    
+    - name: Show group check results
+      debug:
+        var: group_check.results
+
+    - name: Check users exist
+      command: getent passwd {{ item }}
+      register: user_check
+      ignore_errors: yes
+      loop: "{{ users }}"
+
+    - name: Show user check results
+      debug:
+        var: user_check.results

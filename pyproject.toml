@@ -1,0 +1,9 @@
+title = "Ansible PoC Project Configuration"
+
+[project]
+name = "ansible-poc"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    "oracledb>=3.3.0"
+]
