@@ -1,11 +1,20 @@
 # ansible-poc
-Proof of concept (PoC) project using Ansible to create user accounts on Linux machines. The purpose of this project is to practice using Ansible with Chromebook as the control node and remote machines (created with Oracle Cloud free-tier) as target nodes.
-Process Overview:  
-* Enable Ansible on the control node (Chromebook)
-* Create 2 instances in the cloud to use as the target nodes.
-* Create autonomous Oracle database to use as the mock HRMS system and use Python to populate it with fake users.
-* Simulate data pipeline by extracting data from mock HRMS system and loading to JSON file.
-* Use Ansible playbooks to create, verify, and remove users and groups on the cloud servers.
+Ansible Proof of Concept – Automated User Management with Oracle Cloud.
+## Description:
+The purpose of this project to practice infrastructure automation using Ansible with a Chromebook as the control node and Oracle Cloud free-tier instances as targets. The project simulated a real-world HRMS-to-server user provisioning pipeline, integrating Python, Oracle Autonomous Database, and Ansible playbooks.
+
+### Key Highlights:
+* **Control Node Setup:** Configured Linux (Crostini) on Chromebook and installed Ansible as the automation control node.
+* **Cloud Infrastructure:** Deployed and configured two Linux instances in Oracle Cloud, including SSH key setup and networking. Debugged a connectivity issue by updating security group rules for ingress traffic and modifying the route table to properly route outbound traffic through an Internet Gateway.
+* **Data Pipeline Simulation:**
+  * Built a mock HRMS system using an Oracle Autonomous Database.
+  * Populated the database with fake users/roles using Python.
+  * Extracted user data and exported it as JSON for use in Ansible playbooks.
+* **Ansible Automation:** Developed playbooks to create, verify, and remove Linux users and groups on cloud servers. Leveraged Ansible’s idempotence to ensure safe re-runs without unintended changes.
+* **Configuration & Version Control:** Used .gitignore for clean version control and TOML files for project configuration management.
+
+### Outcome
+Demonstrated end-to-end automation — from database-driven data extraction to automated provisioning of users on remote servers — highlighting practical skills in **Ansible, Python, SQL, and Oracle Cloud Infrastructure.**
 
 ## Step 1: Enable Linux Crostini on Chromebook and Install Ansible
 
@@ -64,8 +73,8 @@ chmod 600 ~/.ssh/ssh-key-02.key
 Test connecting to server.  
 `ssh -v -i ~/.ssh/ssh-key-01.key ubuntu@123.123.123.1`  
 
-#### Note on rules for incoming vs outgoing traffic
-Had to troubleshoot timeout error - Ingress (traffic coming in from the internet to the VM) is controlled by the Security List / Network Security Group rules (firewall). My subnet had an ingress rule allowing port 22/TCP from 0.0.0.0/0, which allows incoming public traffic. However the Internet Gateway (IGW), which controls outgoing traffic, did not have an attachment to the VCN. I had to edit the route table for my subnet and add a rule to target the IGW. The rule tells Oracle that any traffic going to anywhere on the internet should exit through the Internet Gateway.  
+#### Note on Network Traffic Rules
+While troubleshooting a timeout error, I learned that ingress traffic (incoming connections from the internet to the VM) is controlled by the Security List / Network Security Group rules (firewall). My subnet already had an ingress rule allowing SSH (port 22/TCP) from any public IP (0.0.0.0/0), so inbound access was not the issue. The problem was with egress traffic — the Internet Gateway (IGW), which handles outbound traffic from the VCN to the internet, was not attached to my subnet. To resolve this, I updated the subnet’s route table to include a rule pointing to the IGW. This ensured that all outbound traffic from the subnet could properly reach the internet.  
 ![igw](/imgs/IGW.png)
 
 ## Step 5: Create an Ansible Inventory
