@@ -1,4 +1,4 @@
-# test-ansible
+# ansible-poc
 Ansible proof of concept (PoC) project. Created to practice using Ansible with Chromebook as the control node and remote machines (created with Oracle Cloud free-tier) as target nodes.
 * Enable Ansible on the control node (Chromebook)
 * Create 2 instances in the cloud to use as the target nodes.
