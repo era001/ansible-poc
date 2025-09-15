@@ -1,8 +1,10 @@
 # ansible-poc
-Ansible proof of concept (PoC) project. Created to practice using Ansible with Chromebook as the control node and remote machines (created with Oracle Cloud free-tier) as target nodes.
+Proof of concept (PoC) project using Ansible to create user accounts on Linux machines. The purpose of this project is to practice using Ansible with Chromebook as the control node and remote machines (created with Oracle Cloud free-tier) as target nodes.
+Process Overview:  
 * Enable Ansible on the control node (Chromebook)
 * Create 2 instances in the cloud to use as the target nodes.
-* Create autonomous Oracle database to use as the mock HRMS system and use Python to populate it with users.
+* Create autonomous Oracle database to use as the mock HRMS system and use Python to populate it with fake users.
+* Simulate data pipeline by extracting data from mock HRMS system and loading to JSON file.
 * Use Ansible playbooks to create, verify, and remove users and groups on the cloud servers.
 
 ## Step 1: Enable Linux Crostini on Chromebook and Install Ansible
